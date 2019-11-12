@@ -2,6 +2,7 @@ package com.example.stupp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db;
     private FirebaseAuth mAuth;
     FirestoreRecyclerAdapter<User, UserHolder> adapter;
-    RecyclerView recyclerView;
+//    RecyclerView recyclerView;
+    CardView cardView;
 
     String email = "joni@gmail.com";
     String password = "ayamgeprek";
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        recyclerView = findViewById(R.id.rv_list);
+        cardView = findViewById(R.id.card_view);
 
 //        signIn(email, password);
     }
@@ -91,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
         };
 
         //SET ADAPTER
-        recyclerView.setAdapter(adapter);
-        adapter.startListening();
+//        recyclerView.setAdapter(adapter);
+
+//        adapter.startListening();
     }
 
     @Override
