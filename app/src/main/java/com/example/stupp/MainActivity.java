@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.stupp.models.Studio;
 import com.example.stupp.models.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -37,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    FirestoreRecyclerAdapter<User, UserHolder> adapter;
-//    RecyclerView recyclerView;
-    CardView cardView;
+    FirestoreRecyclerAdapter<Studio, StudioHolder> adapter;
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+
+//    CardView cardView;
 
     String email = "joni@gmail.com";
     String password = "ayamgeprek";
@@ -51,51 +54,55 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //INITIALIZE
-        FirebaseApp.initializeApp(this);
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        cardView = findViewById(R.id.card_view);
+        recyclerView = findViewById(R.id.list);
 
+        init();
+        getStudioList();
 //        signIn(email, password);
+    }
+
+    private void init(){
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        db = FirebaseFirestore.getInstance();
+    }
+
+    private void getStudioList(){
+        Query query = db.collection("studio");
+
+        FirestoreRecyclerOptions<Studio> options = new FirestoreRecyclerOptions.Builder<Studio>()
+                .setQuery(query, Studio.class)
+                .build();
+
+        //ADAPTER
+        adapter = new FirestoreRecyclerAdapter<Studio, StudioHolder>(options) {
+            @Override
+            public void onBindViewHolder(StudioHolder holder, int position, Studio model) {
+                holder.bind(model);
+                // Bind the Chat object to the ChatHolder
+                // ...
+            }
+
+            @Override
+            public StudioHolder onCreateViewHolder(ViewGroup group, int i) {
+                // Create a new instance of the ViewHolder, in this case we are using a custom
+                // layout called R.layout.message for each item
+                View view = LayoutInflater.from(group.getContext())
+                        .inflate(R.layout.list_item, group, false);
+
+                return new StudioHolder(view);
+            }
+        };
+
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
     }
 
     //FIRESTORE
     @Override
     protected void onStart() {
         super.onStart();
-        //SETTING QUERY
-        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
-                .setQuery(query("user","user_id",uid), User.class)
-                .build();
-
-        //ADAPTER
-        adapter = new FirestoreRecyclerAdapter<User, UserHolder>(options) {
-            @Override
-            public void onBindViewHolder(UserHolder holder, int position, User model) {
-                holder.setData(
-                        model.getUser_id()+ "\n" +
-                                model.getUsername()+ "\n" +
-                                model.getOrder_id());
-                Log.i("GET DATA", model.getUsername());
-                // Bind the Chat object to the ChatHolder
-                // ...
-            }
-
-            @Override
-            public UserHolder onCreateViewHolder(ViewGroup group, int i) {
-                // Create a new instance of the ViewHolder, in this case we are using a custom
-                // layout called R.layout.message for each item
-                View view = LayoutInflater.from(group.getContext())
-                        .inflate(R.layout.list_item, group, false);
-
-                return new UserHolder(view);
-            }
-        };
-
-        //SET ADAPTER
-//        recyclerView.setAdapter(adapter);
-
-//        adapter.startListening();
+        adapter.startListening();
     }
 
     @Override
@@ -107,17 +114,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //USER HOLDER
-    private class UserHolder extends RecyclerView.ViewHolder {
-        private View view;
+//    private class UserHolder extends RecyclerView.ViewHolder {
+//        private View view;
+//
+//        UserHolder(View itemView) {
+//            super(itemView);
+//            view = itemView;
+//        }
+//
+//        void setData(String text) {
+//            TextView tv_item = view.findViewById(R.id.tv_studio_detail);
+//            tv_item.setText(text);
+//        }
+//    }
 
-        UserHolder(View itemView) {
+    //STUDIO HOLDER
+    private class StudioHolder extends RecyclerView.ViewHolder {
+        private TextView name;
+        private TextView details;
+
+        StudioHolder(View itemView) {
             super(itemView);
-            view = itemView;
+            name = itemView.findViewById(R.id.tv_studio_name);
+            details = itemView.findViewById(R.id.tv_studio_detail);
         }
 
-        void setData(String text) {
-            TextView tv_item = view.findViewById(R.id.item);
-            tv_item.setText(text);
+        public void bind(Studio studio){
+            name.setText(studio.studio_name);
+            details.setText(studio.details);
         }
     }
 
@@ -141,10 +165,4 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    //QUERY
-    public Query query (String path, String param, String value) {
-        Query query;
-        query = db.collection(path).whereEqualTo(param, value);
-        return  query;
-    }
 }
