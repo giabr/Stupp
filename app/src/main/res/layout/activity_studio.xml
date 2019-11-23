@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_studio">
+    tools:context=".StudioActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,11 +16,12 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/iv_studioAva_sa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/studio"/>
+                android:src="@drawable/abc_vector_test" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -29,29 +30,30 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="#4D000000"
-                android:drawableLeft=""
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:padding="8dp"
-                android:text=""
-                android:textColor=""/>
+                android:text="Hello"
+                android:textColor="@color/colorAccent"/>
 
         </FrameLayout>
 
         <TextView
+            android:id="@+id/tv_studioName_sa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:text="nama studio"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:textColor=""/>
+            android:text="nama studio"
+            android:textColor="@color/colorAccent"
+            android:textSize="32sp" />
 
         <TextView
+            android:id="@+id/tv_studioDetail_sa"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </ScrollView>

@@ -1,6 +1,8 @@
 package com.example.stupp.models;
 
-public class Studio {
+import java.io.Serializable;
+
+public class Studio implements Serializable {
 
     public Studio(String studio_name, String studio_id, String avatar, String details) {
         this.studio_name = studio_name;
